@@ -1,0 +1,8 @@
+.okx/
+btc_candles*.json
+btc_live.txt
+ahr999_trade_log.txt
+batch_*.json
+__pycache__/
+*.pyc
+.env
