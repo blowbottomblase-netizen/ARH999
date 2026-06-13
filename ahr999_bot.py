@@ -28,12 +28,12 @@ BASE_URL   = "https://www.okx.com"
 
 # ── OKX API helpers ────────────────────────────────────
 def okx_request(method, path, body=None):
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    now = datetime.now(timezone.utc)
+    ts = now.strftime("%Y-%m-%dT%H:%M:%S.") + f"{now.microsecond // 1000:03d}Z"
     body_str = json.dumps(body) if body else ""
+    sign_msg = f"{ts}{method}{path}{body_str}"
     sign = base64.b64encode(
-        hmac.new(SECRET_KEY.encode(),
-                 f"{ts}{method}{path}{body_str}".encode(),
-                 hashlib.sha256).digest()
+        hmac.new(SECRET_KEY.encode(), sign_msg.encode(), hashlib.sha256).digest()
     ).decode()
     headers = {
         "OK-ACCESS-KEY": API_KEY,
